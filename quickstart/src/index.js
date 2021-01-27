@@ -1,8 +1,14 @@
 'use strict';
 
-const { isSupported } = require('twilio-video');
 
-const { isMobile } = require('./browser');
+
+const {
+  isSupported
+} = require('twilio-video');
+
+const {
+  isMobile
+} = require('./browser');
 const joinRoom = require('./joinroom');
 const micLevel = require('./miclevel');
 const selectMedia = require('./selectmedia');
@@ -14,6 +20,10 @@ const $selectMicModal = $('#select-mic', $modals);
 const $selectCameraModal = $('#select-camera', $modals);
 const $showErrorModal = $('#show-error', $modals);
 const $joinRoomModal = $('#join-room', $modals);
+const $exampleModal = $('#exampleModal', $modals);
+const $phoneNumber = $('#phone-number', exampleModal);
+
+const $call = $('#call-phone');
 
 // ConnectOptions settings for a video web application.
 const connectOptions = {
@@ -25,8 +35,14 @@ const connectOptions = {
       dominantSpeakerPriority: 'high',
       mode: 'collaboration',
       renderDimensions: {
-        high: { height: 720, width: 1280 },
-        standard: { height: 90, width: 160 }
+        high: {
+          height: 720,
+          width: 1280
+        },
+        standard: {
+          height: 90,
+          width: 160
+        }
       }
     }
   },
@@ -46,10 +62,17 @@ const connectOptions = {
   // to adapt your encoded video quality for each RemoteParticipant based on
   // their individual bandwidth constraints. This has no utility if you are
   // using Peer-to-Peer Rooms, so you can comment this line.
-  preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
+  preferredVideoCodecs: [{
+    codec: 'VP8',
+    simulcast: true
+  }],
 
   // Capture 720p video @ 24 fps.
-  video: { height: 720, frameRate: 24, width: 1280 }
+  video: {
+    height: 720,
+    frameRate: 24,
+    width: 1280
+  }
 };
 
 // For mobile browsers, limit the maximum incoming video bitrate to 2.5 Mbps.
@@ -83,7 +106,10 @@ async function selectAndJoinRoom(error = null) {
     deviceIds.video = null;
     return selectMicrophone();
   }
-  const { identity, roomName } = formData;
+  const {
+    identity,
+    roomName
+  } = formData;
 
   try {
     // Fetch an AccessToken to join the Room.
@@ -93,13 +119,19 @@ async function selectAndJoinRoom(error = null) {
     const token = await response.text();
 
     // Add the specified audio device ID to ConnectOptions.
-    connectOptions.audio = { deviceId: { exact: deviceIds.audio } };
+    connectOptions.audio = {
+      deviceId: {
+        exact: deviceIds.audio
+      }
+    };
 
     // Add the specified Room name to ConnectOptions.
     connectOptions.name = roomName;
 
     // Add the specified video device ID to ConnectOptions.
-    connectOptions.video.deviceId = { exact: deviceIds.video };
+    connectOptions.video.deviceId = {
+      exact: deviceIds.video
+    };
 
     // Join the Room.
     await joinRoom(token, connectOptions);
@@ -110,6 +142,23 @@ async function selectAndJoinRoom(error = null) {
     return selectAndJoinRoom(error);
   }
 }
+
+$call.click(async function onCall() {
+  // $leave.off('click', onLeave);
+  const phone = $phoneNumber.val();
+  console.log(phone);
+  try {
+    const response = await fetch('/call');
+    console.log(response);
+    
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+
+
 
 /**
  * Select your camera.

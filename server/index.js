@@ -13,8 +13,10 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const { jwt: { AccessToken } } = require('twilio');
+var client = require('twilio')('ACa3fccdfe1b155379db9ed5bcc507eb69', 'c6cfd223fb695cd5d9020e8a7942b7e3');
 
 const VideoGrant = AccessToken.VideoGrant;
+const VoiceResponse = require('twilio').twiml.VoiceResponse;
 
 // Max. period that a Participant is allowed to be in a Room (currently 14400 seconds or 4 hours)
 const MAX_ALLOWED_SESSION_DURATION = 14400;
@@ -83,6 +85,17 @@ app.get('/token', function(request, response) {
 
   // Serialize the token to a JWT string.
   response.send(token.toJwt());
+});
+// Handle an AJAX POST request to place an outbound call
+app.get('/call', function (request, response) {
+  client.calls
+      .create({
+        url: 'http://demo.twilio.com/docs/voice.xml',
+        from: '+2349065266070',
+        to: '+12056353524'
+      })
+      .then(call => console.log(call.sid));
+    response.send()
 });
 
 // Create http server and run it.
