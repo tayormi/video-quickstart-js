@@ -91,7 +91,7 @@ app.get('/call', function (request, response) {
   const { phone } = request.query;
   client.calls
     .create({
-      twiml: `<Response><Connect><Room participantIdentity='PhoneCall'>DailyStandup</Room></Connect></Response>`,
+      twiml: `<Response><Connect><Room participantIdentity='PhoneCall'>Call</Room></Connect></Response>`,
       to: phone,
       from: '+19374683173'
       , funtion(err, call) {
