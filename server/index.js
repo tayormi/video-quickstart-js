@@ -13,7 +13,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const { jwt: { AccessToken } } = require('twilio');
-var client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+var client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, '9898871ec5696d8e825d4a2206f40e4a');
 
 const VideoGrant = AccessToken.VideoGrant;
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
