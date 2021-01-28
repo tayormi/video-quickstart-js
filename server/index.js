@@ -13,7 +13,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const { jwt: { AccessToken } } = require('twilio');
-var client = require('twilio')('ACa3fccdfe1b155379db9ed5bcc507eb69', 'c6cfd223fb695cd5d9020e8a7942b7e3');
+var client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 const VideoGrant = AccessToken.VideoGrant;
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
@@ -64,7 +64,7 @@ app.get('/', (request, response) => {
  * username for the client requesting a token, and takes a device ID as a query
  * parameter.
  */
-app.get('/token', function(request, response) {
+app.get('/token', function (request, response) {
   const { identity } = request.query;
 
   // Create an access token which we will sign and return to the client,
@@ -88,19 +88,26 @@ app.get('/token', function(request, response) {
 });
 // Handle an AJAX POST request to place an outbound call
 app.get('/call', function (request, response) {
+  const { phone } = request.query;
   client.calls
-      .create({
-        url: 'http://demo.twilio.com/docs/voice.xml',
-        from: '+2349065266070',
-        to: '+12056353524'
-      })
-      .then(call => console.log(call.sid));
-    response.send()
+    .create({
+      twiml: `<Response><Connect><Room participantIdentity='PhoneCall'>DailyStandup</Room></Connect></Response>`,
+      to: phone,
+      from: '+19374683173'
+      , funtion(err, call) {
+        if (err) {
+          console.log(err)
+        } else {
+          console.log(call.sid)
+        }
+      }
+    });
+  response.send()
 });
 
 // Create http server and run it.
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
-server.listen(port, function() {
+server.listen(port, function () {
   console.log('Express server running on *:' + port);
 });
