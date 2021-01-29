@@ -147,13 +147,9 @@ $call.click(async function onCall() {
   // $leave.off('click', onLeave);
   const phone = $phoneNumber.val();
   console.log(phone);
-  try {
-    const response = await fetch(`/call?phone=${phone}`);
-    console.log(response);
-    
-  } catch (error) {
-    console.log(error);
-  }
+  const response = await fetch(`/call?phone=${phone}`);
+  console.log(response);
+
 
 });
 

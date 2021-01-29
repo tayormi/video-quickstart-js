@@ -96,13 +96,16 @@ app.get('/call', function (request, response) {
       from: '+19374683173'
       , funtion(err, call) {
         if (err) {
+
           console.log(err)
+          response.send(err)
         } else {
           console.log(call.sid)
+          response.send(call.sid)
         }
       }
-    });
-  response.send()
+    }).then(call => console.log(call));
+
 });
 
 // Create http server and run it.
